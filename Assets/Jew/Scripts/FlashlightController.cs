@@ -5,17 +5,23 @@ public class FlashlightController : MonoBehaviour
 {
     [Header("Flashlight Settings")]
     public Light flashlight;
+    public bool startFlashlightOn = false;
+    public AudioSource flashlightSound;
+
+    [Header("Battery Settings")]
     public float battery = 100f;
     public float maxBattery = 100f;
     public float batteryDrainRate = 5f;
     public float batteryRegenRate = 2f;
     public Slider batteryBar;
-    public AudioSource flashlightSound;
 
-    private bool isFlashlightOn = false;
+    private bool isFlashlightOn;
 
     void Start()
     {
+        isFlashlightOn = startFlashlightOn;
+        flashlight.enabled = isFlashlightOn;
+
         UpdateBatteryUI();
     }
 
@@ -55,7 +61,11 @@ public class FlashlightController : MonoBehaviour
         {
             isFlashlightOn = !isFlashlightOn;
             flashlight.enabled = isFlashlightOn;
-            flashlightSound.Play();
+
+            if (flashlightSound != null)
+            {
+                flashlightSound.Play();
+            }
         }
     }
 
@@ -65,5 +75,12 @@ public class FlashlightController : MonoBehaviour
         {
             batteryBar.value = battery / maxBattery;
         }
+    }
+
+    public void CollectBattery(float amount)
+    {
+        battery += amount;
+        battery = Mathf.Clamp(battery, 0, maxBattery);
+        UpdateBatteryUI();
     }
 }

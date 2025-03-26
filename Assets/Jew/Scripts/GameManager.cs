@@ -26,10 +26,10 @@ public class GameManager : MonoBehaviour
 
     private bool isExitUnlocked = false;
 
-    [Header("Note System")]
+    /*[Header("Note System")]
     public int totalNotes = 10;
     private int collectedNotes = 0;
-    public TextMeshProUGUI notesUI;
+    public TextMeshProUGUI notesUI;*/
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         }
 
         LoadSettings();
-        UpdateNotesUI();
+        /*UpdateNotesUI();*/
     }
 
     void Update()
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CollectNote()
+    /*public void CollectNote()
     {
         collectedNotes++;
         UpdateNotesUI();
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     void UpdateNotesUI()
     {
         notesUI.text = $"Notes: {collectedNotes}/{totalNotes}";
-    }
+    }*/
 
     public void UnlockExit()
     {

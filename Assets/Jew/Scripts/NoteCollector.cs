@@ -8,17 +8,16 @@ public class NoteCollector : MonoBehaviour
 
     [Header("Note System")]
     public int totalNotes = 10;
-    private int collectedNotes = 0;
+    public int collectedNotes = 0;
     public TextMeshProUGUI notesUI;
+    public TextMeshProUGUI currentNoteTextUI;
 
     [Header("Note UI")]
     public GameObject notePanel;
-    public Image noteImage;
     private bool isReadingNote = false;
     private bool canCollectNote = false;
 
-    public Sprite noteSprite;
-    private Sprite currentNoteSprite;
+    private string currentNoteText;
 
     private void Awake()
     {
@@ -35,14 +34,14 @@ public class NoteCollector : MonoBehaviour
         UpdateNotesUI();
     }
 
-    public void CollectNote(Sprite noteSprite)
+    public void CollectNote()
     {
         if (canCollectNote)
         {
             collectedNotes++;
             UpdateNotesUI();
 
-            ShowNote(currentNoteSprite);
+            ShowNote(currentNoteText);
 
             if (collectedNotes >= totalNotes)
             {
@@ -58,11 +57,11 @@ public class NoteCollector : MonoBehaviour
         notesUI.text = $"Notes: {collectedNotes}/{totalNotes}";
     }
 
-    public void ShowNote(Sprite noteSprite)
+    public void ShowNote(string noteText)
     {
         isReadingNote = true;
         notePanel.SetActive(true);
-        noteImage.sprite = noteSprite;
+        currentNoteTextUI.text = noteText;
         Time.timeScale = 0;
     }
 
@@ -77,7 +76,7 @@ public class NoteCollector : MonoBehaviour
     {
         if (canCollectNote && Input.GetKeyDown(KeyCode.E))
         {
-            CollectNote(noteSprite);
+            CollectNote();
         }
 
         if (isReadingNote && Input.GetKeyDown(KeyCode.E))
@@ -86,12 +85,16 @@ public class NoteCollector : MonoBehaviour
         }
     }
 
+    public void AddNoteMessage(string message)
+    {
+        currentNoteText = message;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             canCollectNote = true;
-            currentNoteSprite = other.gameObject.GetComponent<Note>().noteSprite;
         }
     }
 

@@ -2,31 +2,42 @@ using UnityEngine;
 
 public class ObjectPush : MonoBehaviour
 {
+    private Rigidbody targetRb;
+    private Collider targetCollider;
+
+    [Header("Physics Interaction")]
     public float pushForce = 10f;
+    public float stunMultiplier = 0.2f;
+    public LayerMask pushableLayer;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 2f, pushableLayer))
             {
-                Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    Vector3 forceDir = hit.point - transform.position;
-                    forceDir.y = 0;
-                    forceDir.Normalize();
-                    rb.AddForce(forceDir * pushForce, ForceMode.Impulse);
-
-                    GhostAI ghost = hit.collider.GetComponent<GhostAI>();
-                    if (ghost != null)
-                    {
-                        ghost.Stun(pushForce);
-                    }
-                }
+                targetRb = hit.collider.GetComponent<Rigidbody>();
+                targetCollider = hit.collider;
             }
+        }
+
+        if (Input.GetMouseButtonDown(0) && targetRb != null)
+        {
+            Vector3 forceDirection = targetCollider.transform.position - transform.position;
+            forceDirection.Normalize();
+
+            float force = pushForce * targetRb.mass;
+            targetRb.AddForce(forceDirection * force, ForceMode.Impulse);
+
+            if (targetCollider.CompareTag("Ghost"))
+            {
+                float stunDuration = force * stunMultiplier;
+                targetCollider.GetComponent<GhostAI>().Stun(stunDuration);
+            }
+
+            targetRb = null;
+            targetCollider = null;
         }
     }
 }
