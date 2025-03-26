@@ -24,16 +24,13 @@ public class ObjectPush : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && targetRb != null)
         {
-            Vector3 forceDirection = targetCollider.transform.position - transform.position;
-            forceDirection.Normalize();
-
+            Vector3 forceDirection = (targetCollider.transform.position - transform.position).normalized;
             float force = pushForce * targetRb.mass;
             targetRb.AddForce(forceDirection * force, ForceMode.Impulse);
 
             if (targetCollider.CompareTag("Ghost"))
             {
-                float stunDuration = force * stunMultiplier;
-                targetCollider.GetComponent<GhostAI>().Stun(stunDuration);
+                targetCollider.GetComponent<GhostAI>().Stun(forceDirection * force);
             }
 
             targetRb = null;

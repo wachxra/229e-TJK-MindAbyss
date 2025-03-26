@@ -28,14 +28,23 @@ public class PlayerController : MonoBehaviour
     public Slider fearBar;
 
     private Rigidbody rb;
+    private Camera playerCamera;
+    public float crouchHeight = 0.5f;
+    public float standHeight = 2f;
+    private float currentHeight;
 
     void Start()
     {
         moveSpeed = walkSpeed;
         rb = GetComponent<Rigidbody>();
+        playerCamera = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        currentHeight = standHeight;
+        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
     }
+
 
     void Update()
     {
@@ -65,13 +74,34 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            moveSpeed = crouchSpeed;
-            isCrouching = true;
+            if (!isCrouching)
+            {
+                Crouch();
+            }
         }
         else
         {
-            isCrouching = false;
+            if (isCrouching)
+            {
+                StandUp();
+            }
         }
+    }
+
+    void Crouch()
+    {
+        isCrouching = true;
+        moveSpeed = crouchSpeed;
+        currentHeight = crouchHeight;
+        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, crouchHeight, playerCamera.transform.localPosition.z);
+    }
+
+    void StandUp()
+    {
+        isCrouching = false;
+        moveSpeed = walkSpeed;
+        currentHeight = standHeight;
+        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
     }
 
     void HandleStamina()
