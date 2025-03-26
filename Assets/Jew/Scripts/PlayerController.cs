@@ -33,11 +33,15 @@ public class PlayerController : MonoBehaviour
     public float standHeight = 2f;
     private float currentHeight;
 
+    private CapsuleCollider playerCollider;
+
     void Start()
     {
         moveSpeed = walkSpeed;
         rb = GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<Camera>();
+        playerCollider = GetComponent<CapsuleCollider>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -45,12 +49,20 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
     }
 
-
     void Update()
     {
         MovePlayer();
         HandleStamina();
         HandleFear();
+
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouching)
+        {
+            CrouchDown();
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl) && isCrouching)
+        {
+            StandUp();
+        }
     }
 
     void MovePlayer()
@@ -71,37 +83,24 @@ public class PlayerController : MonoBehaviour
             moveSpeed = walkSpeed;
             isSprinting = false;
         }
-
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (!isCrouching)
-            {
-                Crouch();
-            }
-        }
-        else
-        {
-            if (isCrouching)
-            {
-                StandUp();
-            }
-        }
     }
 
-    void Crouch()
+    void CrouchDown()
     {
+        // ย่อตัวทันที
+        playerCollider.height = crouchHeight;
+        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, crouchHeight, playerCamera.transform.localPosition.z);
         isCrouching = true;
         moveSpeed = crouchSpeed;
-        currentHeight = crouchHeight;
-        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, crouchHeight, playerCamera.transform.localPosition.z);
     }
 
     void StandUp()
     {
+        // กลับมายืนทันที
+        playerCollider.height = standHeight;
+        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
         isCrouching = false;
         moveSpeed = walkSpeed;
-        currentHeight = standHeight;
-        playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
     }
 
     void HandleStamina()
