@@ -15,8 +15,6 @@ public class NoteCollector : MonoBehaviour
     [Header("Note UI")]
     public GameObject notePanel;
     private bool isReadingNote = false;
-    private bool canCollectNote = false;
-
     private string currentNoteText;
 
     private void Awake()
@@ -36,19 +34,14 @@ public class NoteCollector : MonoBehaviour
 
     public void CollectNote()
     {
-        if (canCollectNote)
+        collectedNotes++;
+        UpdateNotesUI();
+
+        ShowNote(currentNoteText);
+
+        if (collectedNotes >= totalNotes)
         {
-            collectedNotes++;
-            UpdateNotesUI();
-
-            ShowNote(currentNoteText);
-
-            if (collectedNotes >= totalNotes)
-            {
-                GameManager.Instance.UnlockExit();
-            }
-
-            canCollectNote = false;
+            GameManager.Instance.UnlockExit();
         }
     }
 
@@ -72,37 +65,16 @@ public class NoteCollector : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    void Update()
-    {
-        if (canCollectNote && Input.GetKeyDown(KeyCode.E))
-        {
-            CollectNote();
-        }
-
-        if (isReadingNote && Input.GetKeyDown(KeyCode.E))
-        {
-            CloseNote();
-        }
-    }
-
     public void AddNoteMessage(string message)
     {
         currentNoteText = message;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player"))
+        if (isReadingNote && Input.GetKeyDown(KeyCode.E))
         {
-            canCollectNote = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            canCollectNote = false;
+            CloseNote();
         }
     }
 }

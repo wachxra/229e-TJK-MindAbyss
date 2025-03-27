@@ -38,8 +38,6 @@ public class NoteSpawner : MonoBehaviour
             noteScript.SetNoteDetails(randomMessage, noteSprites[Random.Range(0, noteSprites.Length)]);
 
             availableSpawnPoints.RemoveAt(randomIndex);
-
-            NoteCollector.Instance.AddNoteMessage(randomMessage);
         }
     }
 }

@@ -54,15 +54,6 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         HandleStamina();
         HandleFear();
-
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouching)
-        {
-            CrouchDown();
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftControl) && isCrouching)
-        {
-            StandUp();
-        }
     }
 
     void MovePlayer()
@@ -85,9 +76,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Crouching()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouching)
+        {
+            CrouchDown();
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl) && isCrouching)
+        {
+            StandUp();
+        }
+    }
+
     void CrouchDown()
     {
-        // ย่อตัวทันที
         playerCollider.height = crouchHeight;
         playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, crouchHeight, playerCamera.transform.localPosition.z);
         isCrouching = true;
@@ -96,7 +98,6 @@ public class PlayerController : MonoBehaviour
 
     void StandUp()
     {
-        // กลับมายืนทันที
         playerCollider.height = standHeight;
         playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
         isCrouching = false;
