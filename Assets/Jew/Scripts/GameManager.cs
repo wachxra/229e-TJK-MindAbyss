@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,11 +26,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI notificationText;
 
     private bool isExitUnlocked = false;
-
-    /*[Header("Note System")]
-    public int totalNotes = 10;
-    private int collectedNotes = 0;
-    public TextMeshProUGUI notesUI;*/
+    private bool isGameOver = false;
 
     void Awake()
     {
@@ -44,7 +41,6 @@ public class GameManager : MonoBehaviour
         }
 
         LoadSettings();
-        /*UpdateNotesUI();*/
     }
 
     void Update()
@@ -55,6 +51,20 @@ public class GameManager : MonoBehaviour
     void HandleAudio()
     {
         float distance = Vector3.Distance(player.position, ghost.transform.position);
+
+        if (backgroundMusic != null && backgroundMusic.transform != null)
+        {
+            Vector3 position = backgroundMusic.transform.position;
+        }
+        else if (heartbeatSound != null && heartbeatSound.transform != null)
+        {
+            Vector3 position = heartbeatSound.transform.position;
+        }
+        else
+        {
+            return;
+        }
+
         if (distance < ghost.detectionRange)
         {
             backgroundMusic.volume = Mathf.Lerp(backgroundMusic.volume, 0f, Time.deltaTime * 2);
@@ -84,23 +94,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*public void CollectNote()
-    {
-        collectedNotes++;
-        UpdateNotesUI();
-        notePickupSound.Play();
-
-        if (collectedNotes >= totalNotes)
-        {
-            UnlockExit();
-        }
-    }
-
-    void UpdateNotesUI()
-    {
-        notesUI.text = $"Notes: {collectedNotes}/{totalNotes}";
-    }*/
-
     public void UnlockExit()
     {
         isExitUnlocked = true;
@@ -126,20 +119,32 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        if (!isExitUnlocked) return;
+        if (!isExitUnlocked)
+        {
+            return;
+        }
 
         winSound.Play();
-        SceneManager.LoadScene("WinScene");
+        EndGame();
     }
 
     public void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        isGameOver = true;
+        EndGame();
+    }
+
+    public void EndGame()
+    {
+        if (isExitUnlocked || isGameOver)
+        {
+            SceneManager.LoadScene("EndGame");
+        }
     }
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void ExitGame()
