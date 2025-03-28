@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI notificationText;
 
     private bool isExitUnlocked = false;
+    public bool isExitDoorUnlocked { get; private set; } = false;
     private bool isGameOver = false;
 
     public int notesCollected = 0;
@@ -113,7 +114,20 @@ public class GameManager : MonoBehaviour
         notesCollected++;
         if (notesCollected >= totalNotes)
         {
+            ShowNotification("Find the locked door and unlock it!");
             UnlockExit();
+        }
+    }
+
+    void HandleDoorUnlocked()
+    {
+        if (isExitUnlocked && !isExitDoorUnlocked && Input.GetKeyDown(KeyCode.E))
+        {
+            isExitDoorUnlocked = true;
+            exitDoor.SetActive(false);
+
+            unlockDoorSound.Play();
+            ShowNotification("The door is now unlocked! Enter to escape.");
         }
     }
 
@@ -124,19 +138,22 @@ public class GameManager : MonoBehaviour
         {
             exitDoor.SetActive(false);
         }
-        unlockDoorSound.Play();
-        ShowNotification("The exit is now unlocked!");
+        HandleDoorUnlocked();
     }
 
     public void GameOver()
     {
-        isGameOver = true;
+        if (!isGameOver)
+        {
+            isGameOver = true;
+        }
+        
         SceneManager.LoadScene("LoseScene");
     }
 
     public void EndGame()
     {
-        if (isExitUnlocked)
+        if (isExitUnlocked && isExitDoorUnlocked)
         {
             SceneManager.LoadScene("WinScene");
         }
