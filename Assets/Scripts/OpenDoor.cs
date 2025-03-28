@@ -22,6 +22,12 @@ public class DoorController : MonoBehaviour
             return;
         }
 
+        if (door == null)
+        {
+            Debug.LogError("Door Transform is not assigned!");
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, fpsCamera.transform.position);
 
         if (distance <= interactionRange && Input.GetKeyDown(openCloseKey))
@@ -51,14 +57,11 @@ public class DoorController : MonoBehaviour
         isOpen = false;
     }
 
-    IEnumerator MoveDoor(float targetPositionY)
+    IEnumerator MoveDoor(float targetY)
     {
-        float currentY = door.position.y;
-        float targetY = targetPositionY;
-
         while (Mathf.Abs(door.position.y - targetY) > 0.01f)
         {
-            float newY = Mathf.Lerp(currentY, targetY, Time.deltaTime * openSpeed);
+            float newY = Mathf.MoveTowards(door.position.y, targetY, Time.deltaTime * openSpeed);
             door.position = new Vector3(door.position.x, newY, door.position.z);
             yield return null;
         }
