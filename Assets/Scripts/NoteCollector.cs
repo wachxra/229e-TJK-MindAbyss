@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +9,8 @@ public class NoteCollector : MonoBehaviour
     [Header("Note System")]
     public int totalNotes = 10;
     public int collectedNotes = 0;
-    public TextMeshProUGUI notesUI;
-    public TextMeshProUGUI currentNoteTextUI;
+    public TextMeshProUGUI notesCollectorUI;
+    public TextMeshProUGUI showingNoteTextUI;
 
     [Header("Note UI")]
     public GameObject notePanel;
@@ -47,22 +47,20 @@ public class NoteCollector : MonoBehaviour
 
     void UpdateNotesUI()
     {
-        notesUI.text = $"Notes: {collectedNotes}/{totalNotes}";
+        notesCollectorUI.text = $"Notes: {collectedNotes}/{totalNotes}";
     }
 
     public void ShowNote(string noteText)
     {
         isReadingNote = true;
         notePanel.SetActive(true);
-        currentNoteTextUI.text = noteText;
-        Time.timeScale = 0;
+        showingNoteTextUI.text = noteText;
     }
 
     public void CloseNote()
     {
         isReadingNote = false;
         notePanel.SetActive(false);
-        Time.timeScale = 1;
     }
 
     public void AddNoteMessage(string message)
@@ -72,7 +70,11 @@ public class NoteCollector : MonoBehaviour
 
     private void Update()
     {
-        if (isReadingNote && Input.GetKeyDown(KeyCode.E))
+        if (!isReadingNote && Input.GetKeyDown(KeyCode.E))
+        {
+            ShowNote(currentNoteText);
+        }
+        else if (isReadingNote && Input.GetKeyDown(KeyCode.E))
         {
             CloseNote();
         }

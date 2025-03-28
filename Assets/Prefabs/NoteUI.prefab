@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &431085869963896256
 RectTransform:
   m_ObjectHideFlags: 0
@@ -91,8 +91,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalNotes: 10
   collectedNotes: 0
-  notesUI: {fileID: 0}
-  currentNoteTextUI: {fileID: 1659255903857990326}
+  notesCollectorUI: {fileID: 0}
+  showingNoteTextUI: {fileID: 0}
   notePanel: {fileID: 2972439584220527007}
 --- !u!1 &3742702848448927355
 GameObject:

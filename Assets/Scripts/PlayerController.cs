@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         HandleStamina();
         HandleFear();
+        Crouching();
     }
 
     void MovePlayer()
