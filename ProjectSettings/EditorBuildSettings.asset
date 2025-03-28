@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/WinOrLoseScene.unity
     guid: a3eef2e24ca47374f9de3144261ce0d7
   - enabled: 1
-    path: Assets/Scenes/EndGame.unity
+    path: Assets/Scenes/EndCredit.unity
     guid: 17bfeaeb8edabf84e90e3bce00c2eb7b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
