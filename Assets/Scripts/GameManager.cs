@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         notificationText.gameObject.SetActive(false);
     }
 
-    public void WinGame()
+    /*public void WinGame()
     {
         if (!isExitUnlocked)
         {
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("EndGame");
         }
-    }
+    }*/
 
     public void RestartGame()
     {
