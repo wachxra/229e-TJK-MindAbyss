@@ -28,12 +28,14 @@ public class GameManager : MonoBehaviour
     private bool isExitUnlocked = false;
     private bool isGameOver = false;
 
+    public int notesCollected = 0;
+    public int totalNotes = 10;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -94,17 +96,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UnlockExit()
-    {
-        isExitUnlocked = true;
-        if (exitDoor != null)
-        {
-            exitDoor.SetActive(false);
-        }
-        unlockDoorSound.Play();
-        ShowNotification("The exit is now unlocked!");
-    }
-
     void ShowNotification(string message)
     {
         notificationText.text = message;
@@ -117,30 +108,39 @@ public class GameManager : MonoBehaviour
         notificationText.gameObject.SetActive(false);
     }
 
-    /*public void WinGame()
+    public void CollectNote()
     {
-        if (!isExitUnlocked)
+        notesCollected++;
+        if (notesCollected >= totalNotes)
         {
-            return;
+            UnlockExit();
         }
+    }
 
-        winSound.Play();
-        EndGame();
+    public void UnlockExit()
+    {
+        isExitUnlocked = true;
+        if (exitDoor != null)
+        {
+            exitDoor.SetActive(false);
+        }
+        unlockDoorSound.Play();
+        ShowNotification("The exit is now unlocked!");
     }
 
     public void GameOver()
     {
         isGameOver = true;
-        EndGame();
+        SceneManager.LoadScene("LoseScene");
     }
 
     public void EndGame()
     {
-        if (isExitUnlocked || isGameOver)
+        if (isExitUnlocked)
         {
-            SceneManager.LoadScene("EndGame");
+            SceneManager.LoadScene("WinScene");
         }
-    }*/
+    }
 
     public void RestartGame()
     {

@@ -124,9 +124,9 @@ public class PlayerController : MonoBehaviour
         fear = Mathf.Clamp(fear, 0, maxFear);
         fearBar.value = fear / maxFear;
 
-        /*if (fear >= maxFear)
+        if (fear >= maxFear)
         {
             GameManager.Instance.GameOver();
-        }*/
+        }
     }
 }
