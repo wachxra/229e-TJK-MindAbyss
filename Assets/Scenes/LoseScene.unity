@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 576732663}
   - component: {fileID: 576732662}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: LoseScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: a804931846e9bb2459535a51b383bc39, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
