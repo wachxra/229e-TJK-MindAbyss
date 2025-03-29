@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private bool isSprinting;
     private bool isCrouching;
+    private bool canSprint = true;
     private Vector3 moveDirection;
 
     [Header("Stamina Settings")]
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
         moveDirection = transform.right * moveX + transform.forward * moveZ;
         rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && canSprint)
         {
             moveSpeed = sprintSpeed;
             isSprinting = true;
@@ -150,10 +151,20 @@ public class PlayerController : MonoBehaviour
         if (isSprinting)
         {
             stamina -= staminaDrain * Time.deltaTime;
+            if (stamina <= 0)
+            {
+                stamina = 0;
+                canSprint = false;
+                moveSpeed = walkSpeed;
+            }
         }
         else if (stamina < maxStamina)
         {
             stamina += staminaRegen * Time.deltaTime;
+            if (stamina > maxStamina * 0.2f)
+            {
+                canSprint = true;
+            }
         }
 
         stamina = Mathf.Clamp(stamina, 0, maxStamina);
