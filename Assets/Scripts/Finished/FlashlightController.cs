@@ -16,12 +16,12 @@ public class FlashlightController : MonoBehaviour
     public Slider batteryBar;
 
     private bool isFlashlightOn;
+    private bool canTurnOn = true;
 
     void Start()
     {
-        isFlashlightOn = startFlashlightOn;
+        isFlashlightOn = startFlashlightOn && battery > 0;
         flashlight.enabled = isFlashlightOn;
-
         UpdateBatteryUI();
     }
 
@@ -32,7 +32,7 @@ public class FlashlightController : MonoBehaviour
 
     void HandleFlashlight()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && canTurnOn)
         {
             ToggleFlashlight();
         }
@@ -51,7 +51,14 @@ public class FlashlightController : MonoBehaviour
 
         if (battery <= 0 && isFlashlightOn)
         {
-            ToggleFlashlight();
+            isFlashlightOn = false;
+            flashlight.enabled = false;
+            canTurnOn = false;
+        }
+
+        if (battery > 5f)
+        {
+            canTurnOn = true;
         }
     }
 
@@ -82,5 +89,10 @@ public class FlashlightController : MonoBehaviour
         battery += amount;
         battery = Mathf.Clamp(battery, 0, maxBattery);
         UpdateBatteryUI();
+
+        if (battery > 5f)
+        {
+            canTurnOn = true;
+        }
     }
 }

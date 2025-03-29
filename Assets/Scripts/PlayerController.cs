@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeed = walkSpeed;
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
         playerCamera = GetComponentInChildren<Camera>();
         playerCollider = GetComponent<CapsuleCollider>();
 
@@ -55,6 +57,44 @@ public class PlayerController : MonoBehaviour
         HandleStamina();
         HandleFear();
         Crouching();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            TryPushObject();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    void TryPushObject()
+    {
+        RaycastHit hit;
+        Vector3 rayOrigin = playerCamera.transform.position;
+        Vector3 rayDirection = playerCamera.transform.forward;
+
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, 2f))
+        {
+            if (hit.collider.CompareTag("Pushable"))
+            {
+                Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    float playerMass = rb.mass;
+                    float pushForce = playerMass * 10f;
+
+                    Vector3 forceDirection = rayDirection.normalized;
+                    rb.AddForce(forceDirection * pushForce, ForceMode.Impulse);
+
+                    Debug.Log($"Pushed {hit.collider.name} with force: {pushForce}");
+
+                    GhostAI ghost = hit.collider.GetComponent<GhostAI>();
+                }
+            }
+        }
     }
 
     void MovePlayer()
