@@ -1,63 +1,72 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    public Transform door;
+    public List<Transform> doors;
     public float openSpeed = 2f;
     public float closedPositionY = 0f;
     public float openPositionY = 5f;
     public KeyCode openCloseKey = KeyCode.E;
     public float interactionRange = 3f;
-
     public Camera fpsCamera;
 
-    private bool isOpen = false;
+    private Dictionary<Transform, bool> doorStates = new Dictionary<Transform, bool>();
+
+    void Start()
+    {
+        foreach (var door in doors)
+        {
+            if (door != null)
+            {
+                doorStates[door] = false;
+            }
+        }
+    }
 
     void Update()
     {
-        if (fpsCamera == null)
+        if (fpsCamera == null || doors == null || doors.Count == 0)
         {
-            Debug.LogError("FPS Camera is not assigned!");
             return;
         }
 
-        if (door == null)
+        foreach (var door in doors)
         {
-            Debug.LogError("Door Transform is not assigned!");
-            return;
-        }
+            if (door == null) continue;
 
-        float distance = Vector3.Distance(transform.position, fpsCamera.transform.position);
+            float distance = Vector3.Distance(door.position, fpsCamera.transform.position);
 
-        if (distance <= interactionRange && Input.GetKeyDown(openCloseKey))
-        {
-            if (isOpen)
+            if (distance <= interactionRange && Input.GetKeyDown(openCloseKey))
             {
-                CloseDoor();
-            }
-            else
-            {
-                OpenDoor();
+                if (doorStates[door])
+                {
+                    CloseDoor(door);
+                }
+                else
+                {
+                    OpenDoor(door);
+                }
             }
         }
     }
 
-    void OpenDoor()
+    void OpenDoor(Transform door)
     {
         StopAllCoroutines();
-        StartCoroutine(MoveDoor(openPositionY));
-        isOpen = true;
+        StartCoroutine(MoveDoor(door, openPositionY));
+        doorStates[door] = true;
     }
 
-    void CloseDoor()
+    void CloseDoor(Transform door)
     {
         StopAllCoroutines();
-        StartCoroutine(MoveDoor(closedPositionY));
-        isOpen = false;
+        StartCoroutine(MoveDoor(door, closedPositionY));
+        doorStates[door] = false;
     }
 
-    IEnumerator MoveDoor(float targetY)
+    IEnumerator MoveDoor(Transform door, float targetY)
     {
         while (Mathf.Abs(door.position.y - targetY) > 0.01f)
         {
