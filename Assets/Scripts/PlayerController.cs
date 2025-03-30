@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool isSprinting;
     private bool isCrouching;
     private bool canSprint = true;
+    private bool sprintKeyReleased = true;
     private Vector3 moveDirection;
 
     [Header("Stamina Settings")]
@@ -81,18 +82,12 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.CompareTag("Pushable"))
             {
                 Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-
                 if (rb != null)
                 {
                     float playerMass = rb.mass;
                     float pushForce = playerMass * 10f;
-
                     Vector3 forceDirection = rayDirection.normalized;
                     rb.AddForce(forceDirection * pushForce, ForceMode.Impulse);
-
-                    Debug.Log($"Pushed {hit.collider.name} with force: {pushForce}");
-
-                    GhostAI ghost = hit.collider.GetComponent<GhostAI>();
                 }
             }
         }
@@ -106,7 +101,12 @@ public class PlayerController : MonoBehaviour
         moveDirection = transform.right * moveX + transform.forward * moveZ;
         rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && canSprint)
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            sprintKeyReleased = true;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && canSprint && sprintKeyReleased)
         {
             moveSpeed = sprintSpeed;
             isSprinting = true;
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
         else if (stamina < maxStamina)
         {
             stamina += staminaRegen * Time.deltaTime;
-            if (stamina > maxStamina * 0.2f)
+            if (stamina > maxStamina * 0.5f)
             {
                 canSprint = true;
             }

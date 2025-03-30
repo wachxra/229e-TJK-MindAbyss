@@ -5,8 +5,6 @@ public class NoteSpawner : MonoBehaviour
 {
     public GameObject notePrefab;
     public Transform[] spawnPoints;
-    public string[] noteMessages;
-    public Sprite[] noteSprites;
 
     private List<Transform> availableSpawnPoints;
 
@@ -23,7 +21,7 @@ public class NoteSpawner : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < noteMessages.Length; i++)
+        for (int i = 0; i < spawnPoints.Length; i++)
         {
             if (availableSpawnPoints.Count == 0) break;
 
@@ -32,10 +30,6 @@ public class NoteSpawner : MonoBehaviour
 
             GameObject newNote = Instantiate(notePrefab, spawnPoint.position, Quaternion.identity);
             newNote.transform.SetParent(transform);
-
-            Note noteScript = newNote.GetComponent<Note>();
-            string randomMessage = noteMessages[Random.Range(0, noteMessages.Length)];
-            noteScript.SetNoteDetails(randomMessage, noteSprites[Random.Range(0, noteSprites.Length)]);
 
             availableSpawnPoints.RemoveAt(randomIndex);
         }
