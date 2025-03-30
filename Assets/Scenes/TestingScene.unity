@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 3876d0e183013044aab5adba683217d7, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 3
-  sprintSpeed: 10
+  sprintSpeed: 6
   crouchSpeed: 1.5
   stamina: 50
   maxStamina: 50
@@ -891,7 +891,7 @@ MonoBehaviour:
   totalNotes: 10
   collectedNotes: 0
   notesCollectorUI: {fileID: 327958130}
-  showingNoteTextUI: {fileID: 477128955}
+  showingNoteTextUI: {fileID: 0}
   notePanel: {fileID: 2972439584220527007, guid: 490bf183134e9574a84ac36dda257250, type: 3}
 --- !u!1 &102613294
 GameObject:
@@ -985,8 +985,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 63380875}
     - target: {fileID: 4896848625958559090, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
+      propertyPath: chaseSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4896848625958559090, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
+      propertyPath: fearIncrease
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4896848625958559090, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
       propertyPath: detectionRange
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7213661320685090364, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
       propertyPath: m_Height
@@ -1090,17 +1098,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &477128955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9141685734162856188, guid: 4c2a0596bc9226c4dbe6ec862dfa8a41, type: 3}
-  m_PrefabInstance: {fileID: 675452065}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &534480648
@@ -1336,7 +1333,9 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5473948148994841969, guid: 4c2a0596bc9226c4dbe6ec862dfa8a41, type: 3}
+    - {fileID: 697227678323069388, guid: 4c2a0596bc9226c4dbe6ec862dfa8a41, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c2a0596bc9226c4dbe6ec862dfa8a41, type: 3}
