@@ -36,6 +36,12 @@ public class PlayerController : MonoBehaviour
     private float currentHeight;
 
     private CapsuleCollider playerCollider;
+    private CharacterController controller;
+
+    private bool isOnStairs;
+    private Vector3 stairNormal;
+
+    private Vector3 gravityDirection;
 
     void Start()
     {
@@ -51,6 +57,8 @@ public class PlayerController : MonoBehaviour
 
         currentHeight = standHeight;
         playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
+
+        gravityDirection = Vector3.down;
     }
 
     void Update()
@@ -99,7 +107,15 @@ public class PlayerController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         moveDirection = transform.right * moveX + transform.forward * moveZ;
-        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
+        if (isOnStairs)
+        {
+            Vector3 stairAdjustedMovement = Vector3.ProjectOnPlane(moveDirection, stairNormal);
+            rb.MovePosition(rb.position + stairAdjustedMovement * moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
+        }
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -180,5 +196,34 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.GameOver();
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Stairs"))
+        {
+            isOnStairs = true;
+            stairNormal = collision.contacts[0].normal;
+            gravityDirection = stairNormal;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Stairs"))
+        {
+            isOnStairs = false;
+            gravityDirection = Vector3.down;
+        }
+    }
+
+    public void SetCustomGravity(Vector3 direction)
+    {
+        gravityDirection = direction;
+    }
+
+    public void ResetGravity()
+    {
+        gravityDirection = Vector3.down;
     }
 }
