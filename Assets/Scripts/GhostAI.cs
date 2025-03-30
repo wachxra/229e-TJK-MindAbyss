@@ -19,12 +19,17 @@ public class GhostAI : MonoBehaviour
     public float maxStunDuration = 5f;
     public float maxForceImpact = 10f;
 
+    [Header("Wandering Settings")]
+    public float wanderRadius = 15f;
+    public float wanderInterval = 3f;
+
     private bool isChasing;
     private bool isStunned;
     private Rigidbody rb;
     private NavMeshAgent agent;
     private Animator animator;
     private Collider ghostCollider;
+    private float wanderTimer;
 
     void Start()
     {
@@ -32,6 +37,7 @@ public class GhostAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         ghostCollider = GetComponent<Collider>();
+        wanderTimer = wanderInterval;
     }
 
     void Update()
@@ -61,8 +67,35 @@ public class GhostAI : MonoBehaviour
         }
         else
         {
-            agent.isStopped = true;
+            Wander();
         }
+    }
+
+    void Wander()
+    {
+        wanderTimer -= Time.deltaTime;
+        if (wanderTimer <= 0f || agent.remainingDistance < 1f)
+        {
+            Vector3 wanderTarget = GetRandomNavMeshPosition(transform.position, wanderRadius);
+            agent.isStopped = false;
+            agent.SetDestination(wanderTarget);
+            wanderTimer = wanderInterval;
+        }
+    }
+
+    Vector3 GetRandomNavMeshPosition(Vector3 origin, float radius)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * radius;
+            randomDirection.y = 0;
+            randomDirection += origin;
+            if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, radius, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+        }
+        return origin;
     }
 
     bool CanSeePlayer()
@@ -89,14 +122,11 @@ public class GhostAI : MonoBehaviour
             if (boxRb != null)
             {
                 float mass = boxRb.mass;
-                float velocity = boxRb.linearVelocity.magnitude; // ใช้ boxRb.velocity
+                float velocity = boxRb.linearVelocity.magnitude;
                 float impactForce = Mathf.Min(mass * velocity, maxForceImpact);
-
                 Vector3 impactDirection = (transform.position - other.transform.position).normalized;
-
                 Stun(impactForce, impactDirection);
-
-                Destroy(other.gameObject); // ทำลายกล่องหลังจากชนกับผี
+                Destroy(other.gameObject);
             }
         }
     }
@@ -113,7 +143,6 @@ public class GhostAI : MonoBehaviour
         agent.isStopped = true;
         animator.speed = 0f;
         ghostCollider.isTrigger = false;
-
         player.GetComponent<PlayerController>().fearIncreaseRate = 0f;
 
         Vector3 torqueDirection = Vector3.up;
