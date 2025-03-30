@@ -752,8 +752,8 @@ MonoBehaviour:
   staminaBar: {fileID: 369347866}
   fear: 0
   maxFear: 100
-  fearIncreaseRate: 5
-  fearDecreaseRate: 2
+  fearIncreaseRate: 10
+  fearDecreaseRate: 10
   fearBar: {fileID: 2031840989}
   crouchHeight: 0.5
   standHeight: 2
@@ -932,7 +932,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 859087832206114064, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2549062351829115535, guid: 29e1205c00b5d6c4fbfcb51eff370778, type: 3}
       propertyPath: m_LocalPosition.x
