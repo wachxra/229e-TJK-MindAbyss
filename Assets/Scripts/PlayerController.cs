@@ -29,6 +29,14 @@ public class PlayerController : MonoBehaviour
     public float fearDecreaseRate = 2f;
     public Slider fearBar;
 
+    [Header("Parry Settings")]
+    public float parryDistance = 2f;
+    public float parryWindow = 0.5f;
+    private float lastParryTime = 0f;
+
+    private bool isOnStairs;
+    private Vector3 stairNormal;
+
     private Rigidbody rb;
     private Camera playerCamera;
     public float crouchHeight = 0.5f;
@@ -37,11 +45,7 @@ public class PlayerController : MonoBehaviour
 
     private CapsuleCollider playerCollider;
     private CharacterController controller;
-
-    private bool isOnStairs;
-    private Vector3 stairNormal;
-
-    private Vector3 gravityDirection;
+    public Transform ghost;
 
     void Start()
     {
@@ -57,8 +61,6 @@ public class PlayerController : MonoBehaviour
 
         currentHeight = standHeight;
         playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, standHeight, playerCamera.transform.localPosition.z);
-
-        gravityDirection = Vector3.down;
     }
 
     void Update()
@@ -67,6 +69,7 @@ public class PlayerController : MonoBehaviour
         HandleStamina();
         HandleFear();
         Crouching();
+        Parry();
     }
 
     private void FixedUpdate()
@@ -80,15 +83,7 @@ public class PlayerController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         moveDirection = transform.right * moveX + transform.forward * moveZ;
-        if (isOnStairs)
-        {
-            Vector3 stairAdjustedMovement = Vector3.ProjectOnPlane(moveDirection, stairNormal);
-            rb.MovePosition(rb.position + stairAdjustedMovement * moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
-        }
+        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.deltaTime);
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -168,6 +163,40 @@ public class PlayerController : MonoBehaviour
         if (fear >= maxFear)
         {
             GameManager.Instance.GameOver();
+        }
+    }
+
+    void Parry()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (Time.time - lastParryTime <= parryWindow && Vector3.Distance(transform.position, ghost.position) <= parryDistance)
+            {
+                if (stamina >= 10f)
+                {
+                    PerformParry();
+                }
+            }
+            else
+            {
+                stamina -= 10f;
+                stamina = Mathf.Clamp(stamina, 0, maxStamina);
+            }
+            lastParryTime = Time.time;
+        }
+    }
+
+    void PerformParry()
+    {
+        stamina -= 10f;
+        stamina = Mathf.Clamp(stamina, 0, maxStamina);
+
+        GhostAI ghostAI = ghost.GetComponent<GhostAI>();
+        if (ghostAI != null)
+        {
+            Vector3 impactDirection = (ghost.position - transform.position).normalized;
+            float parryForce = 15f;
+            ghostAI.Stun(parryForce, impactDirection);
         }
     }
 }

@@ -15,9 +15,14 @@ public class GhostAI : MonoBehaviour
 
     [Header("Stun Settings")]
     public float torqueMultiplier = 5f;
-    public float minStunDuration = 1f;
-    public float maxStunDuration = 5f;
+    public float minStunDuration = 0.5f;
+    public float maxStunDuration = 3f;
     public float maxForceImpact = 10f;
+    public float stunForceDivider = 15f;
+    public float recoveryDelay = 0.3f;
+    public float drag = 0.5f;
+    public float angularDrag = 1.0f;
+    public float stunForce = 5f;
 
     [Header("Wandering Settings")]
     public float wanderRadius = 15f;
@@ -38,6 +43,9 @@ public class GhostAI : MonoBehaviour
         animator = GetComponent<Animator>();
         ghostCollider = GetComponent<Collider>();
         wanderTimer = wanderInterval;
+
+        rb.linearDamping = drag;
+        rb.angularDamping = angularDrag;
     }
 
     void Update()
@@ -55,7 +63,7 @@ public class GhostAI : MonoBehaviour
             isChasing = true;
             player.GetComponent<PlayerController>().fear += fearIncrease * Time.deltaTime;
         }
-        else
+        else if (!isStunned)
         {
             isChasing = false;
         }
@@ -68,6 +76,12 @@ public class GhostAI : MonoBehaviour
         else
         {
             Wander();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && distance < detectionRange)
+        {
+            Vector3 impactDirection = (transform.position - player.position).normalized;
+            Stun(stunForce, impactDirection);
         }
     }
 
@@ -118,7 +132,7 @@ public class GhostAI : MonoBehaviour
     {
         float ghostMass = rb.mass;
         float acceleration = force / ghostMass;
-        float stunDuration = Mathf.Clamp(acceleration / 10, minStunDuration, maxStunDuration);
+        float stunDuration = Mathf.Clamp(acceleration / stunForceDivider, minStunDuration, maxStunDuration);
 
         stunTime = stunDuration;
         isStunned = true;
@@ -126,29 +140,24 @@ public class GhostAI : MonoBehaviour
         agent.isStopped = true;
         animator.speed = 0f;
         ghostCollider.isTrigger = false;
-        player.GetComponent<PlayerController>().fearIncreaseRate = 0f;
 
-        Vector3 torqueDirection = Vector3.up;
+        rb.isKinematic = false;
+
+        // ทำให้ผีหมุนอยู่กับที่โดยใช้แรงบิดจากกฎ Magnus Effect
+        Vector3 torqueAxis = Vector3.up;
         float torqueAmount = force * torqueMultiplier;
-        rb.AddTorque(torqueDirection * torqueAmount, ForceMode.Impulse);
+        rb.AddTorque(torqueAxis * torqueAmount, ForceMode.Impulse);
 
         StartCoroutine(RecoverFromStun(stunDuration));
     }
 
     IEnumerator RecoverFromStun(float duration)
     {
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(duration + recoveryDelay);
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance < detectionRange && CanSeePlayer())
-        {
-            player.GetComponent<PlayerController>().fearIncreaseRate = 5f;
-            isChasing = true;
-        }
-
-        ghostCollider.isTrigger = true;
-        animator.speed = 1f;
-        agent.isStopped = false;
         isStunned = false;
+        agent.isStopped = false;
+        animator.speed = 1f;
+        ghostCollider.isTrigger = true;
     }
 }
