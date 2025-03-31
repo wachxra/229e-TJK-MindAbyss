@@ -38,8 +38,13 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+<<<<<<< HEAD
         "com.unity.ugui": "1.0.0",
         "com.unity.services.analytics": "1.0.4"
+=======
+        "com.unity.services.analytics": "1.0.4",
+        "com.unity.ugui": "1.0.0"
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
       },
       "url": "https://packages.unity.com"
     },
@@ -53,9 +58,14 @@
     "com.unity.ext.nunit": {
       "version": "2.0.5",
       "depth": 1,
+<<<<<<< HEAD
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
+=======
+      "source": "builtin",
+      "dependencies": {}
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
     },
     "com.unity.ide.rider": {
       "version": "3.0.31",
@@ -105,10 +115,17 @@
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
+<<<<<<< HEAD
         "com.unity.services.core": "1.12.5",
         "com.unity.modules.androidjni": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0"
+=======
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.services.core": "1.12.5"
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
       },
       "url": "https://packages.unity.com"
     },
@@ -118,8 +135,13 @@
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
+<<<<<<< HEAD
         "com.unity.services.core": "1.12.4",
         "com.unity.modules.jsonserialize": "1.0.0"
+=======
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.services.core": "1.12.4"
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
       },
       "url": "https://packages.unity.com"
     },
@@ -128,22 +150,38 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
+<<<<<<< HEAD
         "com.unity.modules.androidjni": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.modules.unitywebrequest": "1.0.0"
+=======
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.unity.modules.androidjni": "1.0.0"
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
+<<<<<<< HEAD
       "version": "1.4.6",
       "depth": 0,
       "source": "registry",
+=======
+      "version": "1.5.1",
+      "depth": 0,
+      "source": "builtin",
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
       "dependencies": {
         "com.unity.ext.nunit": "2.0.3",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
+<<<<<<< HEAD
       },
       "url": "https://packages.unity.com"
+=======
+      }
+>>>>>>> 7c1221bd6f64ff37288d0cad19d7ba8092416977
     },
     "com.unity.timeline": {
       "version": "1.8.7",

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
@@ -8,6 +7,8 @@ public class MainMenu : MonoBehaviour
     [Header("Sounds Settings")]
     public AudioSource backgroundMusic;
     public AudioSource clickSound;
+
+    private bool isInEndCreditScene = false;
 
     void Start()
     {
@@ -18,6 +19,19 @@ public class MainMenu : MonoBehaviour
         {
             backgroundMusic.loop = true;
             backgroundMusic.Play();
+        }
+
+        if (SceneManager.GetActiveScene().name == "EndCredit")
+        {
+            isInEndCreditScene = true;
+        }
+    }
+
+    void Update()
+    {
+        if (isInEndCreditScene && Input.anyKeyDown)
+        {
+            LoadMainMenu();
         }
     }
 
@@ -48,5 +62,10 @@ public class MainMenu : MonoBehaviour
             yield return new WaitForSeconds(clickSound.clip.length);
         }
         SceneManager.LoadScene(sceneName);
+    }
+
+    private void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

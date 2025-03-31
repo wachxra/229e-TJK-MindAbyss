@@ -8,6 +8,8 @@ TagManager:
   - Note
   - Pushable
   - Stairs
+  - SolidObject
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - Water
   - UI
   - Navmesh
-  - 
-  - 
+  - Ghost
+  - SolidObjects
   - 
   - 
   - 
