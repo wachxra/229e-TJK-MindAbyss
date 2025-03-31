@@ -143,7 +143,6 @@ public class GhostAI : MonoBehaviour
 
         rb.isKinematic = false;
 
-        // ทำให้ผีหมุนอยู่กับที่โดยใช้แรงบิดจากกฎ Magnus Effect
         Vector3 torqueAxis = Vector3.up;
         float torqueAmount = force * torqueMultiplier;
         rb.AddTorque(torqueAxis * torqueAmount, ForceMode.Impulse);
