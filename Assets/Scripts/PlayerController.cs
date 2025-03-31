@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -67,38 +67,11 @@ public class PlayerController : MonoBehaviour
         HandleStamina();
         HandleFear();
         Crouching();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryPushObject();
-        }
     }
 
     private void FixedUpdate()
     {
         rb.angularVelocity = Vector3.zero;
-    }
-
-    void TryPushObject()
-    {
-        RaycastHit hit;
-        Vector3 rayOrigin = playerCamera.transform.position;
-        Vector3 rayDirection = playerCamera.transform.forward;
-
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, 2f))
-        {
-            if (hit.collider.CompareTag("Pushable"))
-            {
-                Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    float playerMass = rb.mass;
-                    float pushForce = playerMass * 10f;
-                    Vector3 forceDirection = rayDirection.normalized;
-                    rb.AddForce(forceDirection * pushForce, ForceMode.Impulse);
-                }
-            }
-        }
     }
 
     void MovePlayer()
@@ -196,34 +169,5 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.GameOver();
         }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Stairs"))
-        {
-            isOnStairs = true;
-            stairNormal = collision.contacts[0].normal;
-            gravityDirection = stairNormal;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Stairs"))
-        {
-            isOnStairs = false;
-            gravityDirection = Vector3.down;
-        }
-    }
-
-    public void SetCustomGravity(Vector3 direction)
-    {
-        gravityDirection = direction;
-    }
-
-    public void ResetGravity()
-    {
-        gravityDirection = Vector3.down;
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class GhostAI : MonoBehaviour
 {
@@ -112,23 +112,6 @@ public class GhostAI : MonoBehaviour
             }
         }
         return false;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Pushable"))
-        {
-            Rigidbody boxRb = other.attachedRigidbody;
-            if (boxRb != null)
-            {
-                float mass = boxRb.mass;
-                float velocity = boxRb.linearVelocity.magnitude;
-                float impactForce = Mathf.Min(mass * velocity, maxForceImpact);
-                Vector3 impactDirection = (transform.position - other.transform.position).normalized;
-                Stun(impactForce, impactDirection);
-                Destroy(other.gameObject);
-            }
-        }
     }
 
     public void Stun(float force, Vector3 impactDirection)
