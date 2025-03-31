@@ -121,5 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6f20cf0ffff93248a3ed52e86278edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteSprite: {fileID: 1611079535, guid: ba0a38eb448446945836e7f66291f0a3, type: 3}
-  noteText: Testtttt
+  detectionRadius: 8
