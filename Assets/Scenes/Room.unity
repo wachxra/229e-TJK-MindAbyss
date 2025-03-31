@@ -914,6 +914,10 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5176271949911389172, guid: 7fd102addbd357540a99aba593950afc, type: 3}
+      propertyPath: mouseSensitivity
+      value: 800
+      objectReference: {fileID: 0}
     - target: {fileID: 8311075076158120513, guid: 7fd102addbd357540a99aba593950afc, type: 3}
       propertyPath: m_Range
       value: 20
