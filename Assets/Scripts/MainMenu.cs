@@ -37,7 +37,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        StartCoroutine(PlayButtonClickAndLoadScene("TestingScene"));
+        StartCoroutine(PlayButtonClickAndLoadScene("Room"));
     }
 
     public void QuitGame()
